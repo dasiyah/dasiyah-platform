@@ -1,58 +1,51 @@
+import Link from "next/link";
 export default function LessonsPage() {
-
   const lessons = [
     {
-      title: "Network Basics",
-      description: "Learn how to explain IP addresses, routers, and network issues in English."
+      title: "Basic IT English",
+      description: "Learn essential English used in tech, including common terms, simple explanations, and workplace vocabulary.",
+      level: "Beginner",
     },
     {
-      title: "Servers & Infrastructure",
-      description: "Understand server terminology and how to discuss hosting environments."
+      title: "Meetings & Communication",
+      description: "Practice speaking clearly in meetings, giving updates, asking questions, and responding professionally.",
+      level: "Intermediate",
     },
     {
-      title: "Troubleshooting Conversations",
-      description: "Practice explaining technical problems to clients and coworkers."
+      title: "Explaining Technical Problems",
+      description: "Learn how to describe bugs, outages, slow systems, and other technical issues in clear English.",
+      level: "Advanced",
     },
-    {
-      title: "Client Communication",
-      description: "Learn how to speak professionally with international clients."
-    },
-    {
-      title: "IT Job Interviews",
-      description: "Prepare for technical interviews in English."
-    }
   ];
 
   return (
-    <main className="p-12">
-
-      <h1 className="text-4xl font-bold mb-10">
+    <main className="min-h-screen bg-black text-white px-6 py-12">
+      <h1 className="text-4xl font-bold text-center mb-12">
         Lesson Modules
       </h1>
 
-      <div className="grid gap-6">
-
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
         {lessons.map((lesson, index) => (
+  <Link
+    key={index}
+    href={`/lessons/${lesson.title.toLowerCase().replace(/\s+/g, "-")}`}
+  >
+    <div className="bg-gray-900 p-6 rounded-xl shadow-md hover:shadow-lg transition cursor-pointer">
+      <h2 className="text-2xl font-semibold text-green-400">
+        {lesson.title}
+      </h2>
 
-          <div
-            key={index}
-            className="border border-gray-700 rounded-xl p-6 hover:border-green-400 transition"
-          >
+      <p className="mt-2 text-xs uppercase tracking-wide text-gray-500">
+        {lesson.level}
+      </p>
 
-            <h2 className="text-2xl font-semibold">
-              {lesson.title}
-            </h2>
-
-            <p className="text-gray-400 mt-2">
-              {lesson.description}
-            </p>
-
-          </div>
-
-        ))}
-
+      <p className="text-gray-400 mt-4">
+        {lesson.description}
+      </p>
+    </div>
+  </Link>
+))}
       </div>
-
     </main>
-  )
+  );
 }

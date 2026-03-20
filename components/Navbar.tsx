@@ -3,7 +3,7 @@ export default function Navbar() {
     <nav className="w-full flex justify-between items-center px-8 py-6 border-b border-gray-800">
 
       <div className="text-xl font-semibold">
-        IT English Specialist
+        Dasiyah
       </div>
 
       <div className="flex gap-8 text-gray-400">
