@@ -1,4 +1,39 @@
+"use client";
+
+import { useState } from "react";
 export default function BasicITLEnglishPage() {
+    const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
+  const [showScore, setShowScore] = useState(false);
+
+  const questions = [
+    {
+      question: "What is a server?",
+      options: [
+        "A computer that provides data or services",
+        "A type of password",
+        "A programming language",
+      ],
+      answer: 0,
+    },
+    {
+      question: "What does 'bug' usually mean in IT?",
+      options: [
+        "A computer virus",
+        "A problem in the software",
+        "A hardware cable",
+      ],
+      answer: 1,
+    },
+    {
+      question: "What does 'login' mean?",
+      options: [
+        "To connect a monitor",
+        "To sign in to an account",
+        "To restart the internet",
+      ],
+      answer: 1,
+    },
+  ];
   return (
     <main className="min-h-screen bg-black text-white px-6 py-12">
       <div className="max-w-4xl mx-auto">
@@ -46,6 +81,76 @@ export default function BasicITLEnglishPage() {
   <p className="text-gray-400 mt-3 italic">
     “My internet is slow, and I cannot connect to the server.”
   </p>
+</section>
+<section className="bg-gray-900 rounded-xl p-6 mt-10">
+  <h2 className="text-2xl font-semibold mb-6">CGA Quiz</h2>
+
+  <div className="space-y-8">
+    {questions.map((q, questionIndex) => (
+      <div key={questionIndex}>
+        <p className="text-gray-200 font-medium mb-3">
+          {questionIndex + 1}. {q.question}
+        </p>
+
+        <div className="space-y-2">
+          {q.options.map((option, optionIndex) => (
+            <button
+              key={optionIndex}
+              onClick={() => {
+                const updatedAnswers = [...selectedAnswers];
+                updatedAnswers[questionIndex] = optionIndex;
+                setSelectedAnswers(updatedAnswers);
+              }}
+              className={`block w-full text-left px-4 py-3 rounded-lg transition ${
+  showScore
+    ? optionIndex === q.answer
+      ? "bg-green-500 text-black"
+      : selectedAnswers[questionIndex] === optionIndex
+      ? "bg-red-500 text-white"
+      : "bg-gray-800 text-white"
+    : selectedAnswers[questionIndex] === optionIndex
+    ? "bg-green-500 text-black"
+    : "bg-gray-800 text-white hover:bg-gray-700"
+}`}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <button
+    onClick={() => setShowScore(true)}
+    className="mt-8 px-6 py-3 bg-green-500 text-black font-semibold rounded-lg hover:bg-green-400 transition"
+  >
+    Submit CGA
+  </button>
+
+  {showScore && (
+    <div className="mt-6">
+      <p className="text-lg text-white">
+        Score:{" "}
+        {
+          questions.filter(
+            (q, index) => selectedAnswers[index] === q.answer
+          ).length
+        }
+        /{questions.length}
+      </p>
+
+      <button
+        onClick={() => {
+          setSelectedAnswers([]);
+          setShowScore(false);
+        }}
+        className="mt-4 px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition"
+      >
+        Reset Quiz
+      </button>
+    </div>
+  )}
 </section>
 <div className="flex gap-4 mt-10">
   <a
