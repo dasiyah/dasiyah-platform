@@ -34,6 +34,9 @@ export default function BasicITLEnglishPage() {
       answer: 1,
     },
   ];
+  const allAnswered =
+  selectedAnswers.length === questions.length &&
+  selectedAnswers.every((answer) => answer !== undefined);
   return (
     <main className="min-h-screen bg-black text-white px-6 py-12">
       <div className="max-w-4xl mx-auto">
@@ -83,7 +86,10 @@ export default function BasicITLEnglishPage() {
   </p>
 </section>
 <section className="bg-gray-900 rounded-xl p-6 mt-10">
-  <h2 className="text-2xl font-semibold mb-6">CGA Quiz</h2>
+  <h2 className="text-2xl font-semibold mb-2">CGA Quiz</h2>
+<p className="text-sm text-gray-400 mb-6">
+  Answer all questions before submitting. This assignment is computer graded.
+</p>
 
   <div className="space-y-8">
     {questions.map((q, questionIndex) => (
@@ -92,7 +98,7 @@ export default function BasicITLEnglishPage() {
           {questionIndex + 1}. {q.question}
         </p>
 
-        <div className="space-y-2">
+                <div className="space-y-2">
           {q.options.map((option, optionIndex) => (
             <button
               key={optionIndex}
@@ -102,43 +108,76 @@ export default function BasicITLEnglishPage() {
                 setSelectedAnswers(updatedAnswers);
               }}
               className={`block w-full text-left px-4 py-3 rounded-lg transition ${
-  showScore
-    ? optionIndex === q.answer
-      ? "bg-green-500 text-black"
-      : selectedAnswers[questionIndex] === optionIndex
-      ? "bg-red-500 text-white"
-      : "bg-gray-800 text-white"
-    : selectedAnswers[questionIndex] === optionIndex
-    ? "bg-green-500 text-black"
-    : "bg-gray-800 text-white hover:bg-gray-700"
-}`}
+                showScore
+                  ? optionIndex === q.answer
+                    ? "bg-green-500 text-black"
+                    : selectedAnswers[questionIndex] === optionIndex
+                    ? "bg-red-500 text-white"
+                    : "bg-gray-800 text-white"
+                  : selectedAnswers[questionIndex] === optionIndex
+                  ? "bg-green-500 text-black"
+                  : "bg-gray-800 text-white hover:bg-gray-700"
+              }`}
             >
               {option}
             </button>
           ))}
         </div>
+
+        {showScore && (
+          <p className="mt-2 text-sm text-gray-400">
+            Correct answer:{" "}
+            <span className="text-green-400">
+              {q.options[q.answer]}
+            </span>
+          </p>
+        )}
       </div>
     ))}
   </div>
 
   <button
-    onClick={() => setShowScore(true)}
-    className="mt-8 px-6 py-3 bg-green-500 text-black font-semibold rounded-lg hover:bg-green-400 transition"
-  >
-    Submit CGA
-  </button>
+  onClick={() => {
+    setShowScore(true);
+
+    const score = questions.filter(
+      (q, index) => selectedAnswers[index] === q.answer
+    ).length;
+
+    if (score >= 2) {
+      const completed = JSON.parse(localStorage.getItem("completedLessons") || "[]");
+
+      if (!completed.includes("Basic IT English")) {
+        completed.push("Basic IT English");
+        localStorage.setItem("completedLessons", JSON.stringify(completed));
+      }
+    }
+  }}
+  disabled={!allAnswered}
+  className={`mt-8 px-6 py-3 font-semibold rounded-lg transition ${
+    allAnswered
+      ? "bg-green-500 text-black hover:bg-green-400"
+      : "bg-gray-700 text-gray-400 cursor-not-allowed"
+  }`}
+>
+  Submit CGA
+</button>
 
   {showScore && (
-    <div className="mt-6">
-      <p className="text-lg text-white">
-        Score:{" "}
-        {
-          questions.filter(
-            (q, index) => selectedAnswers[index] === q.answer
-          ).length
-        }
-        /{questions.length}
-      </p>
+  <div className="mt-6">
+    <p className="text-green-400 font-semibold text-lg mb-2">
+      Assignment Completed ✅
+    </p>
+
+    <p className="text-lg text-white">
+      Score:{" "}
+      {
+        questions.filter(
+          (q, index) => selectedAnswers[index] === q.answer
+        ).length
+      }
+      /{questions.length}
+    </p>
 
       <button
         onClick={() => {
