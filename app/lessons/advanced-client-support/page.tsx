@@ -1,6 +1,6 @@
 "use client";
 
-
+import { saveLessonProgress } from "@/lib/saveLessonProgress";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -286,16 +286,23 @@ export default function AdvancedClientSupportPage() {
   const quizPassed = quizScore >= 2;
   const passed = practicePassed && quizPassed;
 
-  const saveCompletion = () => {
-    const completed = JSON.parse(
-      localStorage.getItem("completedLessons") || "[]"
-    );
+  const saveCompletion = async () => {
+  const completed = JSON.parse(
+    localStorage.getItem("completedLessons") || "[]"
+  );
 
-    if (!completed.includes("Advanced Client Support")) {
-      completed.push("Advanced Client Support");
-      localStorage.setItem("completedLessons", JSON.stringify(completed));
-    }
-  };
+  if (!completed.includes("Advanced Client Support")) {
+    completed.push("Advanced Client Support");
+    localStorage.setItem("completedLessons", JSON.stringify(completed));
+  }
+
+  await saveLessonProgress({
+    lessonSlug: "advanced-client-support",
+    lessonTitle: "Advanced Client Support",
+    completed: true,
+    score: quizScore,
+  });
+};
 
   return (
     <ProtectedRoute>
