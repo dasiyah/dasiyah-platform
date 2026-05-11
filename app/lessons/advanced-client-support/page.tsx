@@ -1,7 +1,9 @@
 "use client";
 
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 type ScenarioResult = {
   feedback: string;
@@ -10,6 +12,7 @@ type ScenarioResult = {
 };
 
 export default function AdvancedClientSupportPage() {
+    
   const router = useRouter();
 
   const [step, setStep] = useState(1);
@@ -295,6 +298,7 @@ export default function AdvancedClientSupportPage() {
   };
 
   return (
+    <ProtectedRoute>
     <main className="min-h-screen bg-black text-white px-6 py-12">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-green-400 mb-4">
@@ -578,6 +582,7 @@ export default function AdvancedClientSupportPage() {
         </div>
       </div>
     </main>
+    </ProtectedRoute>
   );
 }
 
