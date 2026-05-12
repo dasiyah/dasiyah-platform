@@ -17,7 +17,7 @@ export default function SignupPage() {
     setLoading(true);
     setMessage("");
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
     });
@@ -26,6 +26,27 @@ export default function SignupPage() {
       setMessage(error.message);
       setLoading(false);
       return;
+    }
+
+    const user = data.user;
+
+    if (user) {
+      const { error: profileError } = await supabase.from("profiles").upsert(
+        {
+          id: user.id,
+          email: user.email,
+          subscription: "free",
+        },
+        {
+          onConflict: "id",
+        }
+      );
+
+      if (profileError) {
+        setMessage(profileError.message);
+        setLoading(false);
+        return;
+      }
     }
 
     setMessage("✅ Account created. Check your email if confirmation is required.");

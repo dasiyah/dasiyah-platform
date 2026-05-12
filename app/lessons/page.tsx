@@ -1,5 +1,6 @@
 "use client";
 
+import { getSubscription } from "@/lib/getSubscription";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
@@ -22,8 +23,8 @@ type LessonProgress = {
 
 export default function LessonsPage() {
   const [completedSlugs, setCompletedSlugs] = useState<string[]>([]);
-  const [progress, setProgress] = useState<LessonProgress[]>([]);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [progress, setProgress] = useState<LessonProgress[]>([]);
   const [loading, setLoading] = useState(true);
 
   const lessons: Lesson[] = [
@@ -71,8 +72,8 @@ export default function LessonsPage() {
 
   useEffect(() => {
     const loadProgress = async () => {
-      const subscribed = localStorage.getItem("isSubscribed") === "true";
-      setIsSubscribed(subscribed);
+  const subscription = await getSubscription();
+  setIsSubscribed(subscription === "premium");
 
       const {
         data: { user },
