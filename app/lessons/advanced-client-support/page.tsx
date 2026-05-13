@@ -1,5 +1,6 @@
 "use client";
 
+import PremiumRoute from "@/components/PremiumRoute";
 import { saveLessonProgress } from "@/lib/saveLessonProgress";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -56,15 +57,15 @@ export default function AdvancedClientSupportPage() {
       answer: 1,
     },
     {
-      question:
-        "Client is still having connection issues after restarting. What do you do NEXT?",
-      options: [
-        "Tell them the internet is bad",
-        "Check if other devices are affected and continue troubleshooting",
-        "End the conversation",
-      ],
-      answer: 1,
-    },
+  question:
+    "Client is still having connection issues after restarting. What do you do NEXT?",
+  options: [
+    "Tell them the internet is bad",
+    "Check if other devices are affected and continue troubleshooting",
+    "End the conversation",
+  ],
+  answer: 1,
+},
   ];
 
   useEffect(() => {
@@ -306,6 +307,7 @@ export default function AdvancedClientSupportPage() {
 
   return (
     <ProtectedRoute>
+      <PremiumRoute>
     <main className="min-h-screen bg-black text-white px-6 py-12">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-green-400 mb-4">
@@ -589,6 +591,7 @@ export default function AdvancedClientSupportPage() {
         </div>
       </div>
     </main>
+    </PremiumRoute>
     </ProtectedRoute>
   );
 }

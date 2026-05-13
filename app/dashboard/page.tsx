@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Link from "next/link";
+import { getSubscription } from "@/lib/getSubscription";
 
 type LessonProgress = {
   lesson_slug: string;
@@ -14,6 +15,7 @@ type LessonProgress = {
 
 export default function DashboardPage() {
   const [email, setEmail] = useState("");
+  const [subscription, setSubscription] = useState("free");
   const [progress, setProgress] = useState<LessonProgress[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -29,6 +31,9 @@ export default function DashboardPage() {
       }
 
       setEmail(user.email || "");
+
+      const userSubscription = await getSubscription();
+      setSubscription(userSubscription);
 
       const { data, error } = await supabase
         .from("lesson_progress")
@@ -49,6 +54,7 @@ export default function DashboardPage() {
   const totalLessons = 5;
   const completedCount = progress.filter((item) => item.completed).length;
   const progressPercent = Math.round((completedCount / totalLessons) * 100);
+  const isPremium = subscription === "premium";
 
   return (
     <ProtectedRoute>
@@ -139,12 +145,25 @@ export default function DashboardPage() {
                   Account Status
                 </h2>
 
-                <p className="text-gray-400">
+                <p className="text-gray-400 mb-4">
                   Plan:{" "}
-                  <span className="text-green-400 font-semibold">
-                    Early Access
+                  <span
+                    className={`font-semibold ${
+                      isPremium ? "text-green-400" : "text-yellow-400"
+                    }`}
+                  >
+                    {isPremium ? "Premium Access" : "Free Plan"}
                   </span>
                 </p>
+
+                {!isPremium && (
+                  <Link
+                    href="/upgrade"
+                    className="inline-block px-6 py-3 bg-green-500 text-black font-semibold rounded-lg hover:bg-green-400 transition"
+                  >
+                    Upgrade to Premium →
+                  </Link>
+                )}
               </section>
             </>
           )}

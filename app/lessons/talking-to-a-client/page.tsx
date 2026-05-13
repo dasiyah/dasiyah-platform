@@ -1,5 +1,6 @@
 "use client";
 
+import PremiumRoute from "@/components/PremiumRoute";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -69,6 +70,7 @@ export default function TalkingToClientPage() {
 
   return (
     <ProtectedRoute>
+      <PremiumRoute>
       <main className="min-h-screen bg-black text-white px-6 py-12">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold text-green-400 mb-4">
@@ -262,6 +264,7 @@ export default function TalkingToClientPage() {
           </div>
         </div>
       </main>
+      </PremiumRoute>
     </ProtectedRoute>
   );
 }
