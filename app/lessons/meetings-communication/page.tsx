@@ -45,6 +45,9 @@ export default function MeetingsCommunicationPage() {
     return answer === questions[index].answer ? total + 1 : total;
   }, 0);
 
+  const percentage = Math.round((score / questions.length) * 100);
+  const passed = showScore && percentage >= 70;
+
   const saveCompletion = async () => {
     const completed = JSON.parse(
       localStorage.getItem("completedLessons") || "[]"
@@ -59,7 +62,7 @@ export default function MeetingsCommunicationPage() {
       lessonSlug: "meetings-communication",
       lessonTitle: "Meetings & Communication",
       completed: true,
-      score,
+      score: percentage,
     });
   };
 
@@ -132,57 +135,78 @@ export default function MeetingsCommunicationPage() {
                 </p>
 
                 <div className="space-y-2">
-                  {q.options.map((option, oIndex) => (
-                    <button
-                      key={oIndex}
-                      onClick={() => {
-                        const updated = [...selectedAnswers];
-                        updated[qIndex] = oIndex;
-                        setSelectedAnswers(updated);
-                      }}
-                      className={`w-full text-left px-4 py-2 rounded-lg transition ${
-                        selectedAnswers[qIndex] === oIndex
-                          ? "bg-green-500 text-black"
-                          : "bg-gray-800 hover:bg-gray-700"
-                      }`}
-                    >
-                      {option}
-                    </button>
-                  ))}
+                  {q.options.map((option, oIndex) => {
+                    const selected = selectedAnswers[qIndex] === oIndex;
+                    const correct = showScore && oIndex === q.answer;
+                    const wrong =
+                      showScore && selected && oIndex !== q.answer;
+
+                    return (
+                      <button
+                        key={oIndex}
+                        disabled={showScore}
+                        onClick={() => {
+                          const updated = [...selectedAnswers];
+                          updated[qIndex] = oIndex;
+                          setSelectedAnswers(updated);
+                        }}
+                        className={`w-full text-left px-4 py-3 rounded-lg transition ${
+                          correct
+                            ? "bg-green-600 text-white"
+                            : wrong
+                            ? "bg-red-600 text-white"
+                            : selected
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-800 hover:bg-gray-700 text-white"
+                        }`}
+                      >
+                        {option}
+                      </button>
+                    );
+                  })}
                 </div>
+
+                {showScore && (
+                  <p className="mt-2 text-sm text-gray-400">
+                    Correct answer:{" "}
+                    <span className="text-green-400">
+                      {q.options[q.answer]}
+                    </span>
+                  </p>
+                )}
               </div>
             ))}
 
-            <button
-              onClick={async () => {
-                setShowScore(true);
+            {!showScore && (
+              <button
+                onClick={async () => {
+                  setShowScore(true);
 
-                if (score >= 2) {
-                  await saveCompletion();
-                }
-              }}
-              disabled={!allAnswered}
-              className={`mt-6 px-6 py-3 font-semibold rounded-lg transition ${
-                allAnswered
-                  ? "bg-green-500 text-black hover:bg-green-400"
-                  : "bg-gray-700 text-gray-400 cursor-not-allowed"
-              }`}
-            >
-              Submit CGA
-            </button>
+                  if (percentage >= 70) {
+                    await saveCompletion();
+                  }
+                }}
+                disabled={!allAnswered}
+                className={`mt-6 px-6 py-3 font-semibold rounded-lg transition ${
+                  allAnswered
+                    ? "bg-green-500 text-black hover:bg-green-400"
+                    : "bg-gray-700 text-gray-400 cursor-not-allowed"
+                }`}
+              >
+                Submit CGA
+              </button>
+            )}
 
             {showScore && (
               <div className="mt-6 p-6 bg-gray-800 rounded-xl text-center">
                 <h2 className="text-2xl font-bold text-green-400">
-                  Your Score: {score} / {questions.length}
+                  Score: {percentage}%
                 </h2>
 
                 <p className="mt-2 text-gray-300">
-                  {score === questions.length
-                    ? "🔥 Excellent!"
-                    : score >= 2
+                  {passed
                     ? "👍 Good job! Progress saved."
-                    : "📘 Review the lesson and try again."}
+                    : "📘 You need 70% to pass. Review the lesson and try again."}
                 </p>
 
                 <button
@@ -210,7 +234,7 @@ export default function MeetingsCommunicationPage() {
               Practice Vocabulary
             </a>
 
-            {showScore && score >= 2 && (
+            {passed && (
               <button
                 onClick={() => {
                   const subscribed =
