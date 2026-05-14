@@ -51,7 +51,7 @@ export default function DashboardPage() {
     loadDashboard();
   }, []);
 
-  const totalLessons = 5;
+  const totalLessons = 15;
   const completedCount = progress.filter((item) => item.completed).length;
   const progressPercent = Math.round((completedCount / totalLessons) * 100);
   const isPremium = subscription === "premium";
