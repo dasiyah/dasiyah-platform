@@ -5,9 +5,17 @@ import AuthStatus from "./AuthStatus";
 export default function Navbar() {
   return (
     <nav className="w-full flex justify-between items-center px-8 py-6 border-b border-gray-800 bg-black text-white">
-      <div className="text-2xl font-bold text-green-400">
-        Dasiyah
-      </div>
+      <div className="flex items-center gap-3">
+  <img
+    src="/favicon.png"
+    alt="Dasiyah Logo"
+    className="w-8 h-8"
+  />
+
+  <div className="text-2xl font-bold text-green-400">
+    Dasiyah
+  </div>
+</div>
 
       <div className="flex items-center gap-8">
         <div className="flex gap-6 text-gray-400">

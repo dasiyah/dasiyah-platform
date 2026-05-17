@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Dasiyah — English for Tech",
   description: "Real IT-English training for tech learners and support workers.",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
