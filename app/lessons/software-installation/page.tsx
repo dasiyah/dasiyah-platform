@@ -1,40 +1,43 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { saveLessonProgress } from "@/lib/saveLessonProgress";
 
-export default function BasicITLEnglishPage() {
+export default function SoftwareInstallationPage() {
+  const router = useRouter();
+
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [showScore, setShowScore] = useState(false);
 
   const questions = [
     {
-      question: "What is a server?",
+      question: "What is the first step before installing software?",
       options: [
-        "A computer that provides data or services",
-        "A type of password",
-        "A programming language",
+        "Restart the computer randomly",
+        "Check system requirements",
+        "Delete all files",
+      ],
+      answer: 1,
+    },
+    {
+      question: "Which sentence sounds most professional?",
+      options: [
+        "Please download the installer from the official website.",
+        "Just click random buttons.",
+        "I don’t know how to install it.",
       ],
       answer: 0,
     },
     {
-      question: "What does 'bug' usually mean in IT?",
+      question: "Why are software updates important?",
       options: [
-        "A computer virus",
-        "A problem in the software",
-        "A hardware cable",
+        "They improve security and performance",
+        "They damage the operating system",
+        "They slow every computer permanently",
       ],
-      answer: 1,
-    },
-    {
-      question: "What does 'login' mean?",
-      options: [
-        "To connect a monitor",
-        "To sign in to an account",
-        "To restart the internet",
-      ],
-      answer: 1,
+      answer: 0,
     },
   ];
 
@@ -51,14 +54,14 @@ export default function BasicITLEnglishPage() {
       localStorage.getItem("completedLessons") || "[]"
     );
 
-    if (!completed.includes("Basic IT English")) {
-      completed.push("Basic IT English");
+    if (!completed.includes("Software Installation")) {
+      completed.push("Software Installation");
       localStorage.setItem("completedLessons", JSON.stringify(completed));
     }
 
     await saveLessonProgress({
-      lessonSlug: "basic-it-english",
-      lessonTitle: "Basic IT English",
+      lessonSlug: "software-installation",
+      lessonTitle: "Software Installation",
       completed: true,
       score,
     });
@@ -69,58 +72,84 @@ export default function BasicITLEnglishPage() {
       <main className="min-h-screen bg-black text-white px-6 py-12">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold text-green-400 mb-4">
-            Basic IT English
+            Software Installation
           </h1>
 
           <p className="text-gray-400 text-lg mb-10">
-            Learn foundational English used in technology, support, and software
-            environments.
+            Learn how to explain software installation steps, updates, and setup
+            processes in professional IT English.
           </p>
 
           <section className="bg-gray-900 rounded-xl p-6 mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Lesson Objective</h2>
+            <h2 className="text-2xl font-semibold mb-4">
+              Lesson Objective
+            </h2>
+
             <p className="text-gray-300">
-              By the end of this lesson, students should be able to explain
-              simple IT concepts in English and understand common workplace
-              vocabulary.
+              By the end of this lesson, students should be able to guide users
+              through installing and updating software applications.
             </p>
           </section>
 
           <section className="bg-gray-900 rounded-xl p-6 mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Key Vocabulary</h2>
+            <h2 className="text-2xl font-semibold mb-4">
+              Key Vocabulary
+            </h2>
+
             <ul className="list-disc list-inside text-gray-300 space-y-2">
-              <li>Server</li>
-              <li>Network</li>
-              <li>Database</li>
-              <li>Bug</li>
-              <li>Login</li>
+              <li>Installer</li>
+              <li>Setup wizard</li>
+              <li>System requirements</li>
+              <li>Software update</li>
+              <li>Installation process</li>
             </ul>
           </section>
 
           <section className="bg-gray-900 rounded-xl p-6 mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Example Sentences</h2>
+            <h2 className="text-2xl font-semibold mb-4">
+              Example Sentences
+            </h2>
+
             <ul className="space-y-3 text-gray-300">
-              <li>“The server is down right now.”</li>
-              <li>“I cannot log in to my account.”</li>
-              <li>“There is a bug in the application.”</li>
-              <li>“The database stores customer information.”</li>
+              <li>
+                “Please download the installer from the official website.”
+              </li>
+
+              <li>
+                “The setup wizard will guide you through the installation.”
+              </li>
+
+              <li>
+                “Your software has been updated successfully.”
+              </li>
+
+              <li>
+                “Please verify the system requirements before installing.”
+              </li>
             </ul>
           </section>
 
           <section className="bg-gray-900 rounded-xl p-6 mt-8">
-            <h2 className="text-2xl font-semibold mb-4">Practice Prompt</h2>
-            <p className="text-gray-300">Try explaining this in English:</p>
+            <h2 className="text-2xl font-semibold mb-4">
+              Practice Prompt
+            </h2>
+
+            <p className="text-gray-300">
+              Try explaining this in English:
+            </p>
+
             <p className="text-gray-400 mt-3 italic">
-              “My internet is slow, and I cannot connect to the server.”
+              “The user needs help installing the newest software version.”
             </p>
           </section>
 
           <section className="bg-gray-900 rounded-xl p-6 mt-10">
-            <h2 className="text-2xl font-semibold mb-2">CGA Quiz</h2>
+            <h2 className="text-2xl font-semibold mb-2">
+              CGA Quiz
+            </h2>
 
             <p className="text-sm text-gray-400 mb-6">
-              Answer all questions before submitting. This assignment is
-              computer graded.
+              Answer all questions before submitting.
             </p>
 
             <div className="space-y-8">
@@ -190,55 +219,57 @@ export default function BasicITLEnglishPage() {
               <div className="mt-6">
                 {score >= 2 ? (
                   <p className="text-green-400 font-semibold text-lg mb-2">
-                    Assignment Completed ✅
+                    Assignment Complete ✅
                   </p>
                 ) : (
                   <p className="text-red-400 font-semibold text-lg mb-2">
-                    Not Passed ❌ — Review the lesson and try again.
+                    Not Passed ❌ — Try Again
                   </p>
                 )}
-
-                <p className="text-lg text-white">
-                  Score: {score}/{questions.length}
-                </p>
 
                 <button
                   onClick={() => {
                     setSelectedAnswers([]);
                     setShowScore(false);
                   }}
-                  className="mt-4 px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition"
+                  className="mt-4 px-6 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition"
                 >
-                  Reset Quiz
+                  Retry
                 </button>
+
+                <p className="text-lg text-white mt-4">
+                  Score: {score}/{questions.length}
+                </p>
               </div>
             )}
+
+            <div className="flex gap-4 mt-10">
+              <a
+                href="/lessons"
+                className="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition"
+              >
+                Back to Lessons
+              </a>
+
+              <a
+                href="/vocabulary"
+                className="px-6 py-3 bg-green-500 text-black font-semibold rounded-lg hover:bg-green-400 transition"
+              >
+                Practice Vocabulary
+              </a>
+
+              {showScore && score >= 2 && (
+                <button
+                  onClick={() => {
+                    router.push("/dashboard");
+                  }}
+                  className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-400 transition"
+                >
+                  Next Lesson →
+                </button>
+              )}
+            </div>
           </section>
-
-          <div className="flex flex-wrap gap-4 mt-10">
-  <a
-    href="/lessons"
-    className="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition"
-  >
-    Back to Lessons
-  </a>
-
-  <a
-    href="/vocabulary"
-    className="px-6 py-3 bg-green-500 text-black font-semibold rounded-lg hover:bg-green-400 transition"
-  >
-    Practice Vocabulary
-  </a>
-
-  {showScore && score >= 2 && (
-    <a
-      href="/lessons/login-problems"
-      className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-400 transition"
-    >
-      Next Lesson →
-    </a>
-  )}
-</div>
         </div>
       </main>
     </ProtectedRoute>

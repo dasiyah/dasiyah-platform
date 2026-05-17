@@ -13,8 +13,14 @@ type Lesson = {
   premium: boolean;
 };
 
+type LessonProgress = {
+  lesson_slug: string;
+  completed: boolean;
+};
+
 export default function LessonsPage() {
   const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
   const [subscription, setSubscription] = useState("free");
 
   useEffect(() => {
@@ -33,6 +39,16 @@ export default function LessonsPage() {
         if (profile?.subscription) {
           setSubscription(profile.subscription);
         }
+
+        const { data: progress } = await supabase
+          .from("lesson_progress")
+          .select("lesson_slug, completed")
+          .eq("user_id", user.id)
+          .eq("completed", true);
+
+        setCompletedLessons(
+          (progress as LessonProgress[] | null)?.map((item) => item.lesson_slug) || []
+        );
       }
 
       const { data } = await supabase
@@ -58,9 +74,18 @@ export default function LessonsPage() {
         </p>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {lessons.map((lesson) => {
-            const locked =
+          {lessons.map((lesson, index) => {
+            const isPremiumLocked =
               lesson.premium && subscription !== "premium";
+
+            const previousLesson = lessons[index - 1];
+            const previousCompleted =
+              index === 0 ||
+              completedLessons.includes(previousLesson?.slug);
+
+            const isProgressLocked = !previousCompleted;
+            const isCompleted = completedLessons.includes(lesson.slug);
+            const locked = isPremiumLocked || isProgressLocked;
 
             return (
               <div
@@ -72,11 +97,19 @@ export default function LessonsPage() {
                     {lesson.level}
                   </span>
 
-                  {lesson.premium && (
-                    <span className="text-sm px-3 py-1 rounded-full bg-yellow-500 text-black font-semibold">
-                      PREMIUM
-                    </span>
-                  )}
+                  <div className="flex gap-2">
+                    {isCompleted && (
+                      <span className="text-sm px-3 py-1 rounded-full bg-green-500 text-black font-semibold">
+                        COMPLETED
+                      </span>
+                    )}
+
+                    {lesson.premium && (
+                      <span className="text-sm px-3 py-1 rounded-full bg-yellow-500 text-black font-semibold">
+                        PREMIUM
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <h2 className="text-2xl font-bold mb-3">
@@ -87,19 +120,26 @@ export default function LessonsPage() {
                   {lesson.description}
                 </p>
 
-                {locked ? (
+                {isPremiumLocked ? (
                   <button
                     className="w-full bg-gray-700 text-gray-400 py-3 rounded-lg cursor-not-allowed"
                     disabled
                   >
                     Premium Required
                   </button>
+                ) : isProgressLocked ? (
+                  <button
+                    className="w-full bg-gray-700 text-gray-400 py-3 rounded-lg cursor-not-allowed"
+                    disabled
+                  >
+                    Complete Previous Lesson
+                  </button>
                 ) : (
                   <Link
                     href={`/lessons/${lesson.slug}`}
                     className="block w-full text-center bg-green-500 hover:bg-green-400 text-black font-semibold py-3 rounded-lg transition"
                   >
-                    Start Lesson →
+                    {isCompleted ? "Review Lesson →" : "Start Lesson →"}
                   </Link>
                 )}
               </div>

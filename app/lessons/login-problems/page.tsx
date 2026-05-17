@@ -68,17 +68,24 @@ export default function LoginProblemsLesson() {
   }
 
   async function completeLesson() {
-    await saveLessonProgress({
-      lessonSlug: "login-problems",
-      lessonTitle: "Login Problems",
-      completed: true,
-      score,
-    });
+    try {
+      await saveLessonProgress({
+        lessonSlug: "login-problems",
+        lessonTitle: "Login Problems",
+        completed: true,
+        score,
+      });
 
-    alert("Lesson Completed!");
+      alert("Lesson Completed!");
+    } catch (error) {
+      console.error(error);
+      alert("Error saving lesson progress.");
+    }
   }
 
-  const allQuestionsAnswered = Object.keys(selectedAnswers).length === questions.length;
+  const allQuestionsAnswered =
+    Object.keys(selectedAnswers).length === questions.length;
+
   const passed = quizChecked && score >= 70;
 
   return (
@@ -129,15 +136,28 @@ export default function LoginProblemsLesson() {
             <h2 className="text-2xl font-semibold mb-4">Core Phrases</h2>
 
             <div className="space-y-3">
-              <div className="bg-zinc-900 p-4 rounded-xl">“Can you confirm your username?”</div>
-              <div className="bg-zinc-900 p-4 rounded-xl">“Please reset your password.”</div>
-              <div className="bg-zinc-900 p-4 rounded-xl">“Your account appears to be locked.”</div>
-              <div className="bg-zinc-900 p-4 rounded-xl">“Did you receive the verification code?”</div>
+              <div className="bg-zinc-900 p-4 rounded-xl">
+                “Can you confirm your username?”
+              </div>
+
+              <div className="bg-zinc-900 p-4 rounded-xl">
+                “Please reset your password.”
+              </div>
+
+              <div className="bg-zinc-900 p-4 rounded-xl">
+                “Your account appears to be locked.”
+              </div>
+
+              <div className="bg-zinc-900 p-4 rounded-xl">
+                “Did you receive the verification code?”
+              </div>
             </div>
           </div>
 
           <div className="mb-10">
-            <h2 className="text-2xl font-semibold mb-4">Real-World Scenario</h2>
+            <h2 className="text-2xl font-semibold mb-4">
+              Real-World Scenario
+            </h2>
 
             <div className="bg-zinc-900 p-6 rounded-xl">
               <p className="mb-4">
@@ -159,23 +179,39 @@ export default function LoginProblemsLesson() {
           </div>
 
           <div className="mb-10">
-            <h2 className="text-2xl font-semibold mb-4">Quick Quiz</h2>
+            <h2 className="text-2xl font-semibold mb-4">
+              Quick Quiz
+            </h2>
 
             <div className="space-y-6">
               {questions.map((q, index) => (
-                <div key={index} className="bg-zinc-900 p-6 rounded-xl">
-                  <h3 className="font-bold mb-4">{q.question}</h3>
+                <div
+                  key={index}
+                  className="bg-zinc-900 p-6 rounded-xl"
+                >
+                  <h3 className="font-bold mb-4">
+                    {q.question}
+                  </h3>
 
                   <div className="grid gap-3">
                     {q.options.map((option) => {
-                      const selected = selectedAnswers[index] === option;
-                      const correct = quizChecked && option === q.answer;
-                      const wrong = quizChecked && selected && option !== q.answer;
+                      const selected =
+                        selectedAnswers[index] === option;
+
+                      const correct =
+                        quizChecked && option === q.answer;
+
+                      const wrong =
+                        quizChecked &&
+                        selected &&
+                        option !== q.answer;
 
                       return (
                         <button
                           key={option}
-                          onClick={() => selectAnswer(index, option)}
+                          onClick={() =>
+                            selectAnswer(index, option)
+                          }
                           className={`p-3 rounded-lg text-left transition ${
                             correct
                               ? "bg-green-700"
@@ -211,7 +247,9 @@ export default function LoginProblemsLesson() {
 
             {quizChecked && (
               <div className="mt-6 bg-zinc-900 p-5 rounded-xl">
-                <p className="text-xl font-bold">Score: {score}%</p>
+                <p className="text-xl font-bold">
+                  Score: {score}%
+                </p>
 
                 {passed ? (
                   <p className="text-green-400 mt-2">
@@ -226,7 +264,7 @@ export default function LoginProblemsLesson() {
             )}
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-4">
             <button
               onClick={completeLesson}
               disabled={!passed}
@@ -245,6 +283,15 @@ export default function LoginProblemsLesson() {
             >
               Back to Lessons
             </Link>
+
+            {passed && (
+              <Link
+                href="/lessons/password-reset-support"
+                className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-xl font-bold"
+              >
+                Next Lesson →
+              </Link>
+            )}
           </div>
 
         </div>

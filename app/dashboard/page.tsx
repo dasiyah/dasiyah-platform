@@ -132,11 +132,19 @@ export default function DashboardPage() {
                   </p>
 
                   <Link
-                    href="/lessons"
-                    className="inline-block px-6 py-3 bg-green-500 text-black font-semibold rounded-lg hover:bg-green-400 transition"
-                  >
-                    Continue Learning →
-                  </Link>
+  href={
+    completedCount === 0
+      ? "/lessons/basic-it-english"
+      : completedCount === 1
+      ? "/lessons/explaining-technical-problems"
+      : completedCount === 2
+      ? "/lessons/meetings-communication"
+      : "/lessons"
+  }
+  className="inline-block px-6 py-3 bg-green-500 text-black font-semibold rounded-lg hover:bg-green-400 transition"
+>
+  Continue Learning →
+</Link>
                 </div>
               </section>
 

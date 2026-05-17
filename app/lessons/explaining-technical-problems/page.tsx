@@ -261,7 +261,7 @@ export default function ExplainingTechnicalProblemsPage() {
               {showScore && score >= 2 && (
                 <button
                   onClick={() => {
-                    router.push("/lessons/advanced-client-support");
+                    router.push("/dashboard");
                   }}
                   className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-400 transition"
                 >
