@@ -237,14 +237,7 @@ export default function MeetingsCommunicationPage() {
             {passed && (
               <button
                 onClick={() => {
-                  const subscribed =
-                    localStorage.getItem("isSubscribed") === "true";
-
-                  if (subscribed) {
-                    router.push("/lessons/talking-to-a-client");
-                  } else {
-                    router.push("/upgrade");
-                  }
+                  router.push("/upgrade");
                 }}
                 className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-400 transition"
               >
